@@ -1,0 +1,56 @@
+//Project table
+//@@id(name: "新名字，若沒有就會要用預設的",[key, phase])
+model Project {
+    key       String      @id @default(uuid())
+    name      String
+    typeId    Int
+    leaderId  Int
+    trusteeId Int
+    type      TypeMapping @relation("Type", fields: [typeId], references: [key])
+    leader    User        @relation("Leader", fields: [leaderId], references: [id])
+    trustee   User        @relation("Trustee", fields: [trusteeId], references: [id])
+}
+
+//Type Mapping table
+model TypeMapping {
+    key            Int       @id
+    group          String //project, task
+    name           String
+    describe       String
+    projectsAsType Project[] @relation("Type")
+}
+
+//User table
+model User {
+    id                Int       @id @default(autoincrement())
+    name              String
+    avater            String
+    permissions       Int // 1: 全編輯, 2: 部分編輯
+    projectsAsLeader  Project[] @relation("Leader")
+    projectsAsTrustee Project[] @relation("Trustee")
+}
+
+model StatusMapping {
+    key   Int    @id
+    value String
+}
+
+model PriorityMapping {
+    key   Int    @id
+    value String
+}
+
+model TagsMapping {
+    key   Int    @id
+    value String
+}
+
+model TeamMapping {
+    key   Int    @id
+    value String
+}
+
+model StageMapping {
+    key   Int    @id
+    value String
+}
